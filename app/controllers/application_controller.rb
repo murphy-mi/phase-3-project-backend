@@ -5,17 +5,30 @@ class ApplicationController < Sinatra::Base
   get "/" do
     { message: "Good luck with your project!" }.to_json
   end
+
   get "/users" do
-    { message: "Good luck with your project!" }.to_json
+    users = User.all.order(:name)
+    users.to_json
   end
+
+  post "/users" do
+    user = User.create(name: params[:name], location: params[:location], image_URL: params[:image])
+    user.to_json
+  end
+
   get "/users/:id" do
-    { message: "Good luck with your project!" }.to_json
+    user = User.find(params[:id])
+    user.to_json
   end
+
   get "/locations" do
-    { message: "Good luck with your project!" }.to_json
+    locations = Location.all.order(:country)
+    locations.to_json
   end
+
   get "/locations/:id" do
-    { message: "Good luck with your project!" }.to_json
+    location = Location.find(params[:id])
+    location.to_json
   end
 
 end
