@@ -21,6 +21,11 @@ class ApplicationController < Sinatra::Base
     user.to_json
   end
 
+  post "/visits" do
+    visit = Visit.create(visited: params[:visited], want_to_visit: params[:want_to_visit], user_id: params[:user_id], location_id: params[:location_id])
+    visit.to_json
+  end
+
   get "/locations" do
     locations = Location.all.order(:country)
     locations.to_json
