@@ -31,6 +31,11 @@ class ApplicationController < Sinatra::Base
     locations.to_json
   end
 
+  post "/locations" do
+    location = Location.create(country: params[:country], state: params[:state])
+    location.to_json
+  end
+
   get "/locations/:id" do
     location = Location.find(params[:id])
     location.to_json
