@@ -21,12 +21,19 @@ class LocationController < ApplicationController
     def location_params
         allowed_params = %w(country state)
         params.select {|param,value| allowed_params.include?(param)}
-      end
+    end
     
     def serialize(location)
         location.to_json(
-            only: [:id, :country, :state]
-            #methods: [:visits]
+            only: [:id, :country, :state],
+            :include => { visits: {
+                only: [:id, :visited, :want_to_visit],
+                :include => {
+                    user: {
+                        only: [:id, :name, :location, :image_URL]
+                    }
+                }
+            }}
         )
     end
 

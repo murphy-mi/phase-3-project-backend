@@ -24,7 +24,13 @@ class UserController < ApplicationController
     end
 
     def serialize(user)
-        user.to_json(
+        # user.left_joins(:visits).to_json(
+        #     only: [:id, :name, :location, :image_URL],
+        #     :include => { visits: {
+        #         only: [:id, :visited, :want_to_visit]
+        #     }}            
+        # )
+        user.includes(:visits).to_json(
             only: [:id, :name, :location, :image_URL],
             :include => { visits: {
                 only: [:id, :visited, :want_to_visit],
@@ -33,7 +39,7 @@ class UserController < ApplicationController
                         only: [:id, :country, :state]
                     }
                 }
-                }}
+            }}
         )
     end
 

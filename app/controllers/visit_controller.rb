@@ -16,7 +16,10 @@ class VisitController < ApplicationController
     def serialize(visit)
         visit.to_json(
             only: [:id, :visited, :want_to_visit],
-            methods: [:user, :location]
+            :include => {
+                user: {only: [:id, :name, :location, :image_URL]},
+                location: {only: [:id, :country, :state]}
+            }
         )
     end
 
