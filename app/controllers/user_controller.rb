@@ -25,8 +25,15 @@ class UserController < ApplicationController
 
     def serialize(user)
         user.to_json(
-            only: [:id, :name, :location, :image_URL]
-            #methods: [:visits]
+            only: [:id, :name, :location, :image_URL],
+            :include => { visits: {
+                only: [:id, :visited, :want_to_visit],
+                :include => {
+                    location: {
+                        only: [:id, :country, :state]
+                    }
+                }
+                }}
         )
     end
 
