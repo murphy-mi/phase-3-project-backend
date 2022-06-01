@@ -7,7 +7,7 @@ class LocationController < ApplicationController
     end
 
     post "/locations" do
-        location = Location.create(country: params[:country], state: params[:state])
+        location = Location.create(location_params)
         serialize(location)
     end
 
@@ -18,14 +18,15 @@ class LocationController < ApplicationController
 
     private
 
-    def walk_params
+    def location_params
         allowed_params = %w(country state)
         params.select {|param,value| allowed_params.include?(param)}
       end
     
     def serialize(location)
         location.to_json(
-            only: [:users, :visits]
+            only: [:id, :country, :state]
+            #methods: [:visits]
         )
     end
 

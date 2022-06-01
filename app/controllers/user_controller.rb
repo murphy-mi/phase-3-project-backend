@@ -3,17 +3,31 @@ class UserController < ApplicationController
 
     get "/users" do
         users = User.all.order(:name)
-        users.to_json
+        serialize(users)
     end
 
     post "/users" do
-        user = User.create(name: params[:name], location: params[:location], image_URL: params[:image])
-        user.to_json
+        user = User.create(user_params)
+        serialize(user)
     end
 
     get "/users/:id" do
         user = User.find(params[:id])
-        user.to_json
+        serialize(user)
+    end
+
+    private
+
+    def user_params
+        allowed_params = %w(name location image_URL)
+        params.select {|param,value| allowed_params.include?(param)}
+    end
+
+    def serialize(user)
+        user.to_json(
+            only: [:id, :name, :location, :image_URL]
+            #methods: [:visits]
+        )
     end
 
 end
