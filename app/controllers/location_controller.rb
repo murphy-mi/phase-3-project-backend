@@ -3,17 +3,30 @@ class LocationController < ApplicationController
 
     get "/locations" do
         locations = Location.all.order(:country)
-        locations.to_json
+        serialize(locations)
     end
 
     post "/locations" do
         location = Location.create(country: params[:country], state: params[:state])
-        location.to_json
+        serialize(location)
     end
 
     get "/locations/:id" do
         location = Location.find(params[:id])
-        location.to_json
+        serialize(location)
+    end
+
+    private
+
+    def walk_params
+        allowed_params = %w(country state)
+        params.select {|param,value| allowed_params.include?(param)}
+      end
+    
+    def serialize(location)
+        location.to_json(
+            only: [:users, :visits]
+        )
     end
 
 end
