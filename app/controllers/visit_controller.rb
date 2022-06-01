@@ -6,6 +6,12 @@ class VisitController < ApplicationController
         serialize(visit)
     end
 
+    delete "/visits/:id" do
+        visit = Visit.find(params[:id])
+        visit.destroy
+        serialize(visit)
+    end
+
     private
 
     def user_params
