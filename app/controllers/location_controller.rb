@@ -16,6 +16,12 @@ class LocationController < ApplicationController
         serialize(location)
     end
 
+    delete "/locations/:id" do
+        location = Location.find(params[:id])
+        location.destroy
+        serialize(location)
+    end
+
     private
 
     def location_params
