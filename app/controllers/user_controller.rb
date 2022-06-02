@@ -7,7 +7,17 @@ class UserController < ApplicationController
     end
 
     post "/users" do
-        user = User.create(user_params)
+        pp params
+        user = User.create(name: params[:name], location: params[:location], image_URL: params[:image_URL])
+        params[:visits].each do |visit|
+            pp visit
+            visit_location = Location.find_by(country: visit[:country] )
+            if !visit_location
+                visit_location = Location.create(country: visit[:country] )
+            end
+
+            new_visit = Visit.create(user_id: user.id, location_id: visit_location.id, want_to_visit: visit[:wantToVisit], visited: visit[:haveVisited])
+        end
         serialize(user)
     end
 
@@ -30,7 +40,7 @@ class UserController < ApplicationController
         #         only: [:id, :visited, :want_to_visit]
         #     }}            
         # )
-        user.includes(:visits).to_json(
+        user.to_json(
             only: [:id, :name, :location, :image_URL],
             :include => { visits: {
                 only: [:id, :visited, :want_to_visit],
