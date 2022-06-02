@@ -51,6 +51,12 @@ class UserController < ApplicationController
         serialize(user)
     end
 
+    delete "/users/:id" do
+        user = User.find(params[:id])
+        user.destroy
+        serialize(user)
+    end
+
     private
 
     def user_params
