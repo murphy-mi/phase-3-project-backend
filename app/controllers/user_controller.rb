@@ -21,6 +21,28 @@ class UserController < ApplicationController
         serialize(user)
     end
 
+    patch "/users/:id" do
+        pp params[:id]
+        # pp params[:id][:id]
+        user = User.find(params[:id])
+        user.update(name: params[:name], location: params[:location], image_URL: params[:image_URL])
+        params[:visits].each do |visit|
+            pp visit
+            visit_location = Location.find_by(country: visit[:country] )
+            if !visit_location
+                visit_location = Location.create(country: visit[:country] )
+            end
+
+            visited = Visit.find_by(user_id: params[:id], location_id: visit_location.id)
+            if !visited
+                visited = Visit.create(user_id: params[:id], location_id: visit_location.id, want_to_visit: visit[:wantToVisit], visited: visit[:haveVisited])
+            else
+                visited = Visit.update(want_to_visit: visit[:wantToVisit], visited: visit[:haveVisited])
+            end
+        end
+        serialize(user)
+    end
+
     get "/users/:id" do
         user = User.find(params[:id])
         serialize(user)
