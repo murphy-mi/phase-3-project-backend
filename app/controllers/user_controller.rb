@@ -1,4 +1,6 @@
+require "pry"
 class UserController < ApplicationController
+
     set :default_content_type, 'application/json'
 
     get "/users" do
@@ -34,10 +36,11 @@ class UserController < ApplicationController
             end
 
             visited = Visit.find_by(user_id: params[:id], location_id: visit_location.id)
+
             if !visited
                 visited = Visit.create(user_id: params[:id], location_id: visit_location.id, want_to_visit: visit[:wantToVisit], visited: visit[:haveVisited])
             else
-                visited = Visit.update(want_to_visit: visit[:wantToVisit], visited: visit[:haveVisited])
+                visited = visited.update(want_to_visit: visit[:wantToVisit], visited: visit[:haveVisited])
             end
         end
         serialize(user)
